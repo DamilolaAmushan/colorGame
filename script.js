@@ -7,27 +7,40 @@ const newGameButton = document.querySelector(".newGameButton");
 let correctColor;
 let score = 0;
 
-function generateRandomColor() {
-  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  return `#${randomColor.padStart(6, "0")}`;
+function generateRandomBaseColor() {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function generateShade(baseColor, factor) {
+  const [r, g, b] = baseColor.match(/\d+/g).map(Number);
+  
+  const newR = Math.min(255, Math.max(0, Math.floor(r * factor)));
+  const newG = Math.min(255, Math.max(0, Math.floor(g * factor)));
+  const newB = Math.min(255, Math.max(0, Math.floor(b * factor)));
+
+  return `rgb(${newR}, ${newG}, ${newB})`;
 }
 
 function setColors() {
-  correctColor = generateRandomColor();
+  const baseColor = generateRandomBaseColor();
+  correctColor = baseColor;
   colorBox.style.backgroundColor = correctColor;
 
   const colorChoices = [];
   for (let i = 0; i < colorOptions.length; i++) {
-    const randomColor = generateRandomColor();
-    colorChoices.push(randomColor);
+    const shadeFactor = 0.7 + Math.random() * 0.6; 
+    colorChoices.push(generateShade(baseColor, shadeFactor));
   }
 
   const correctOptionIndex = Math.floor(Math.random() * colorOptions.length);
-  colorChoices[correctOptionIndex] = correctColor;
+  colorChoices[correctOptionIndex] = correctColor; 
 
   colorOptions.forEach((button, index) => {
     button.style.backgroundColor = colorChoices[index];
-    button.onclick = function() {
+    button.onclick = function () {
       checkGuess(colorChoices[index]);
     };
   });
@@ -56,7 +69,6 @@ function updateScore() {
 }
 
 function startNewRound() {
-  score = 0;
   updateScore();
   gameStatus.textContent = "Guess the color!";
   colorOptions.forEach(button => button.disabled = false);
