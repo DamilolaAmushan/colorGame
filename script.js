@@ -56,6 +56,7 @@ function checkGuess(selectedColor) {
       gameStatus.classList.remove("correct-answer", "wrong-answer");
     });
     colorOptions.forEach(button => button.disabled = true);
+    setTimeout(startNewRound, 1000);
   } else {
     gameStatus.textContent = "Try again!";
     gameStatus.style.color = "red";
