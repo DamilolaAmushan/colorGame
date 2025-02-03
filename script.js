@@ -38,10 +38,15 @@ function checkGuess(selectedColor) {
     score++;
     gameStatus.textContent = "Correct!";
     gameStatus.style.color = "green";
+    gameStatus.classList.add("correct-answer");
+    gameStatus.addEventListener("animationend", () => {
+      gameStatus.classList.remove("correct-answer", "wrong-answer");
+    });
     colorOptions.forEach(button => button.disabled = true);
   } else {
     gameStatus.textContent = "Try again!";
     gameStatus.style.color = "red";
+    gameStatus.classList.add("wrong-answer");
   }
   updateScore();
 }
@@ -51,7 +56,9 @@ function updateScore() {
 }
 
 function startNewRound() {
-  gameStatus.textContent = "";
+  score = 0;
+  updateScore();
+  gameStatus.textContent = "Guess the color!";
   colorOptions.forEach(button => button.disabled = false);
   setColors();
 }
