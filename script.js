@@ -70,6 +70,7 @@ function updateScore() {
 }
 
 function startNewRound() {
+  score = 0;
   updateScore();
   gameStatus.textContent = "Guess the color!";
   colorOptions.forEach(button => button.disabled = false);
